@@ -12,7 +12,7 @@ function getDatabaseUri() {
 
     // if the DATABASE_URL enviorment variable, use that
     // otherwise create the db connection string ourselves
-    return process.env.DATABASE_URL || `postgresql://${dbUser}:${dbPass}:${dbHost}:${dbPort}/${dbName}`
+    return process.env.DATABASE_URL || `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`
 }
 
 console.log("vaccine_hub Config:".red)

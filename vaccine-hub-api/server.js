@@ -3,12 +3,16 @@ const morgan = require("morgan")
 const cors = require("cors")
 const { BadRequestError, NotFoundError } = require("./utils/errors")
 const { PORT } = require("./config")
+const authRoutes = require("./routes/auth")
 
 const app = express()
 
 app.use(morgan("tiny")) //log request info
 app.use(express.json()) //parse incoming request bodies with JSON payloads
 app.use(cors()) //enables cross-origin resource sharing for all origins
+
+app.use("/auth", authRoutes)
+
 
 /* Handle all 404 errors that weren't matched by a route */
 app.use((req, res, next) => {
