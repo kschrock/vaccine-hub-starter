@@ -4,6 +4,16 @@ const db = require("../db")
 const { BCRYPT_WORK_FACTOR } = require("../config")
 
 class User {
+
+
+    static async makePublicUser(user){
+        return{
+            id : user.id,
+            email : user.email,
+            createdAt : user.posting_date
+        }
+    }
+
     static async login(credentials){
         // user should submit their email and password
         // if and othe fields are missing, throw an error
@@ -15,9 +25,12 @@ class User {
         })
         // lookup the user in the db by email
         // if a user is found, compare the submitted password
-        const existingUser = await User.fetchUserByEmail(credentials.email)
-        if(existingUser){
-            throw new BadRequestError(`Duplicate Email: ${credentials.email}`)
+        const user = await User.fetchUserByEmail(credentials.email)
+        if(user){
+            const isValid = await bcrypt.compare(credentials.password, user.password)
+            if(isValid){
+                return User.makePublicUser(user)
+            }
         }
         // with the password in the db
         // if there is a match, return the user
